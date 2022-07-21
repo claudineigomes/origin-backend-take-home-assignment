@@ -6,13 +6,48 @@ import com.origin.takehomeassignment.domain.ScoreCalculationDetail
 import com.origin.takehomeassignment.domain.VehicleInfo
 import com.origin.takehomeassignment.enum.MaritalStatusEnum
 import com.origin.takehomeassignment.enum.OwnershipStatusEnum
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
 internal class HouseFormulaTest {
+
+    @Test
+    fun shouldReturnRiskEmpty() {
+        val riskCalculationRequest = RiskCalculationRequest(
+            29,
+            2,
+            HouseInfo(OwnershipStatusEnum.owned),
+            0,
+            MaritalStatusEnum.married,
+            listOf(false, true, false),
+            VehicleInfo(2018)
+        )
+        val houseFormula = HouseFormula()
+        val scoreCalculationDetails = houseFormula.execute(riskCalculationRequest)
+        Assertions.assertTrue(scoreCalculationDetails.isEmpty())
+    }
+
+    @Test
+    fun shouldReturnRiskMortgaged() {
+        val riskCalculationRequest = RiskCalculationRequest(
+            35,
+            2,
+            HouseInfo(OwnershipStatusEnum.mortgaged),
+            0,
+            MaritalStatusEnum.married,
+            listOf(false, true, false),
+            VehicleInfo(2018)
+        )
+        val houseFormula = HouseFormula()
+        val scoreCalculationDetails = houseFormula.execute(riskCalculationRequest)
+        Assertions.assertFalse(scoreCalculationDetails.isEmpty())
+        assertEquals(scoreCalculationDetails, listOf(HouseFormula.SCORE_HOUSE_MORTGAGED))
+    }
 
     @ParameterizedTest
     @MethodSource("createArguments")

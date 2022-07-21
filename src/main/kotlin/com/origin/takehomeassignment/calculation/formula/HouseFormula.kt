@@ -6,6 +6,10 @@ import com.origin.takehomeassignment.enum.OwnershipStatusEnum
 
 class HouseFormula : ModelFormula() {
 
+    companion object {
+        val SCORE_HOUSE_MORTGAGED = ScoreCalculationDetail(0, 1, 1, 0)
+    }
+
     override fun calculate(
         riskCalculationRequest: RiskCalculationRequest,
         otherCalculations: List<ScoreCalculationDetail>
@@ -13,7 +17,7 @@ class HouseFormula : ModelFormula() {
         val house = riskCalculationRequest.house
         return when (house?.ownership_status) {
             OwnershipStatusEnum.owned -> emptyList()
-            OwnershipStatusEnum.mortgaged -> listOf(ScoreCalculationDetail(0, 1, 1, 0))
+            OwnershipStatusEnum.mortgaged -> listOf(SCORE_HOUSE_MORTGAGED)
             else -> emptyList()
         }
     }
