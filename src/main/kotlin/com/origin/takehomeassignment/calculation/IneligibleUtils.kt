@@ -16,6 +16,14 @@ class IneligibleUtils {
         val house = riskCalculationRequest.house
         val vehicle = riskCalculationRequest.vehicle
         val age = riskCalculationRequest.age
+        val riskQuestions = riskCalculationRequest.risk_questions
+        val hasRiskQuestionTrue = riskQuestions.filter { it }.isNotEmpty()
+        if (!hasRiskQuestionTrue && income < 25000) {
+            riskCalculationResponse.auto = RiskCalculationEnum.ineligible
+            riskCalculationResponse.home = RiskCalculationEnum.ineligible
+            riskCalculationResponse.disability = RiskCalculationEnum.ineligible
+            riskCalculationResponse.life = RiskCalculationEnum.ineligible
+        }
 
         if (income == 0)
             riskCalculationResponse.disability = RiskCalculationEnum.ineligible
